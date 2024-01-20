@@ -60,7 +60,7 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
       options.disablePeriods != null &&
       subject.periodsArray.some((periods) => periods.matches(options.disablePeriods!), false)
     ) &&
-    ((options.periods.length == 0 &&
+    ((options.periods.length === 0 &&
       !options.concentration &&
       !options.negotiable &&
       !options.asneeded) ||
@@ -71,21 +71,21 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
 
   // standard year of course
   const matchesYear = (() => {
-    if (options.year == 'null') {
+    if (options.year === 'null') {
       return true;
-    } else if (subject.year.indexOf('-') == -1) {
-      return subject.year.indexOf(options.year) > -1;
-    } else {
-      const minYear = subject.year.replace(/\s-\s[1-6]/g, '');
-      const maxYear = subject.year.replace(/[1-6]\s-\s/g, '');
-      return minYear <= options.year && options.year <= maxYear;
     }
+    if (subject.year.indexOf('-') === -1) {
+      return subject.year.indexOf(options.year) > -1;
+    }
+    const minYear = subject.year.replace(/\s-\s[1-6]/g, '');
+    const maxYear = subject.year.replace(/[1-6]\s-\s/g, '');
+    return minYear <= options.year && options.year <= maxYear;
   })();
 
   // requirements
-  const matchesReqA = options.reqA == 'null' || options.reqA == subject.reqA;
-  const matchesReqB = options.reqB == 'null' || options.reqB == subject.reqB;
-  const matchesReqC = options.reqC == 'null' || options.reqC == subject.reqC;
+  const matchesReqA = options.reqA === 'null' || options.reqA === subject.reqA;
+  const matchesReqB = options.reqB === 'null' || options.reqB === subject.reqB;
+  const matchesReqC = options.reqC === 'null' || options.reqC === subject.reqC;
 
   // term
   const matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
@@ -99,11 +99,11 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
 
   // other options
   const bookmarked = getBookmarks().includes(subject.code);
-  const matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
+  const matchesOnline = options.online === 'null' || subject.note.indexOf(options.online) > -1;
   const matchesBookmark =
-    options.filter == 'all' ||
-    (options.filter == 'bookmark' && bookmarked) ||
-    (options.filter == 'except-bookmark' && !bookmarked);
+    options.filter === 'all' ||
+    (options.filter === 'bookmark' && bookmarked) ||
+    (options.filter === 'except-bookmark' && !bookmarked);
 
   return (
     matchesKeyword &&

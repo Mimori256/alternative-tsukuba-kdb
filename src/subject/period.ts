@@ -8,7 +8,7 @@ export class Periods {
     this._periods = timetable.create(false);
     let dayArray: number[] = [];
 
-    if (value != null && typeof value == 'string') {
+    if (value != null && typeof value === 'string') {
       const periodStrArray = (value as string).split(',');
       for (const periodStr of periodStrArray) {
         const dayStr = periodStr.replace(/[0-9\\-]/g, '');

@@ -19,11 +19,10 @@ const removeBookmark = (subjectCode: string) => {
   const bookmarks = getBookmarks();
   if (!bookmarks.includes(subjectCode)) {
     return false;
-  } else {
-    const newBookmarks = bookmarks.filter((value) => value !== subjectCode);
-    saveBookmark(newBookmarks);
-    return true;
   }
+  const newBookmarks = bookmarks.filter((value) => value !== subjectCode);
+  saveBookmark(newBookmarks);
+  return true;
 };
 
 export const onBookmarkChanged = (checked: boolean, code: string) => {
@@ -31,10 +30,9 @@ export const onBookmarkChanged = (checked: boolean, code: string) => {
     const bookmarks = getBookmarks();
     if (bookmarks.includes(code)) {
       return;
-    } else {
-      bookmarks.push(code);
-      saveBookmark(bookmarks);
     }
+    bookmarks.push(code);
+    saveBookmark(bookmarks);
   } else {
     removeBookmark(code);
   }
@@ -108,9 +106,9 @@ const switchDisplayTimetable = (animates: boolean) => {
 };
 
 const switchTimetable = (no: number) => {
-  if (displayingModule != no && no < 6) {
+  if (displayingModule !== no && no < 6) {
     displayingModule = no;
-    dom.tableList.style.marginLeft = timetableWidth * displayingModule * -1 + 'px';
+    dom.tableList.style.marginLeft = `${timetableWidth * displayingModule * -1}px`;
     update();
   }
 };
@@ -167,7 +165,7 @@ export const initialize = () => {
 
       for (let y = -1; y < timetable.maxTime; y++) {
         const item = document.createElement('li');
-        if (y == -1) {
+        if (y === -1) {
           item.innerHTML = timetable.daysofweek[x];
         }
         row.appendChild(item);
@@ -200,7 +198,7 @@ export const initialize = () => {
   };
   const sortedFromValues = Object.values(from).sort((a, b) => a.month - b.month);
   for (const term of sortedFromValues) {
-    if (month > term.month || (month == term.month && date >= term.date)) {
+    if (month > term.month || (month === term.month && date >= term.date)) {
       switchTimetable(term.index);
     }
   }
@@ -235,7 +233,7 @@ export const update = () => {
 
             // period
             const [startNo, endNo] =
-              subject.termCodes.length == subject.periodsArray.length
+              subject.termCodes.length === subject.periodsArray.length
                 ? [Number(subjectModuleNo), Number(subjectModuleNo)]
                 : [0, subject.periodsArray.length - 1];
 
@@ -243,7 +241,7 @@ export const update = () => {
               const periods = subject.periodsArray[i];
               if (periods.get(day, time)) {
                 // exclude from the timetable for search
-                if (moduleNo == displayingModule) {
+                if (moduleNo === displayingModule) {
                   timetable.disablePeriods.set(day, time, true);
                 }
 
@@ -268,7 +266,7 @@ export const update = () => {
                 const div = document.createElement('div');
                 div.className = 'class';
                 div.innerHTML = subject.name;
-                div.style.margin = 0.1 * (no + 1) + 'rem';
+                div.style.margin = `${0.1 * (no + 1)}rem`;
                 div.style.background = `hsl(${h}, ${s}, 90%, 0.8)`;
                 item.appendChild(syllabusLink);
                 syllabusLink.appendChild(div);
@@ -302,14 +300,14 @@ export const update = () => {
 
   // credit
   for (const code of bookmarks) {
-    if (code in subjectMap && !isNaN(subjectMap[code].credit)) {
+    if (code in subjectMap && !Number.isNaN(subjectMap[code].credit)) {
       credit += Number(subjectMap[code].credit);
     }
   }
 
   // status
   const season = displayingModule < 3 ? '春' : '秋';
-  const module_ = displayingModule % 3 == 0 ? 'A' : displayingModule % 3 == 1 ? 'B' : 'C';
+  const module_ = displayingModule % 3 === 0 ? 'A' : displayingModule % 3 === 1 ? 'B' : 'C';
   dom.module.innerHTML = season + module_;
-  dom.credit.innerHTML = credit.toFixed(1) + '単位';
+  dom.credit.innerHTML = `${credit.toFixed(1)}単位`;
 };

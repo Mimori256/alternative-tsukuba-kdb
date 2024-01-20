@@ -20,7 +20,7 @@ const isNormalSeason = (char: string): char is NormalSeasons =>
 const isModule = (char: string): char is Modules => (modules as readonly string[]).includes(char);
 
 export const getTermCode = (season: NormalSeasons, char: Modules) =>
-  (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
+  (season === '春' ? 0 : 3) + (char === 'A' ? 0 : char === 'B' ? 1 : 2);
 
 export class Subject {
   private _code: string;

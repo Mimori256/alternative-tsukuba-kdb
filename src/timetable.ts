@@ -108,10 +108,10 @@ export const initialize = () => {
       item.classList.add('item');
       line.appendChild(item);
 
-      if (y > 0 && x == -1) {
+      if (y > 0 && x === -1) {
         item.innerHTML = y.toString();
         item.classList.add('no');
-      } else if (y == 0 && x > -1) {
+      } else if (y === 0 && x > -1) {
         item.innerHTML = daysofweek[x];
         item.classList.add('day');
       } else if (y > 0 && x >= 0) {

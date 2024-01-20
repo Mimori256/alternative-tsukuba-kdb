@@ -42,7 +42,7 @@ let dom: {
 };
 
 let lineLimit: number;
-let timeout: any;
+let timeout: NodeJS.Timeout;
 
 let bookmarks: string[] = [];
 
@@ -68,7 +68,7 @@ const updateTable = (options: SearchOptions, index: number, displayedIndex: numb
     }
 
     if (isMobile()) {
-      const div = renderSubjectForMobile(subject, index == 0);
+      const div = renderSubjectForMobile(subject, index === 0);
       dom.bodyMobile.appendChild(div);
 
       // Make bookmark buttons active
@@ -108,7 +108,7 @@ const search = (e: Event | null) => {
 
   if (isMobile()) {
     const seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
-    if (seasonModule != 'null') {
+    if (seasonModule !== 'null') {
       const firstChar = seasonModule.slice(0, 1);
       const secondChar = seasonModule.slice(1);
       if (firstChar === '春' || firstChar === '秋') {
@@ -219,7 +219,6 @@ window.onload = function () {
     li.addEventListener('click', () => {
       // bookmark
       if (index === 6) {
-        console.log('!!');
         dom.form.bookmark.value = li.classList.contains('selected') ? 'all' : 'bookmark';
         syncKeywordOptionsDisplay(index);
       } else {
@@ -231,7 +230,7 @@ window.onload = function () {
 
   const syncRadio = (lists: Element[], options: RadioNodeList) => {
     lists.forEach((list, index) => {
-      if ((options[index] as HTMLInputElement).value == options.value) {
+      if ((options[index] as HTMLInputElement).value === options.value) {
         list.classList.add('selected');
       } else {
         list.classList.remove('selected');
@@ -324,7 +323,7 @@ window.onload = function () {
 
   // search
   dom.keyword.addEventListener('keydown', (evt) => {
-    if (evt.key == 'Enter') {
+    if (evt.key === 'Enter') {
       evt.preventDefault();
       search(evt);
     }
@@ -336,21 +335,21 @@ window.onload = function () {
     const escaped = /,|\r?\n|\r|"/;
     const e = /"/g;
 
-    var bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-    const csv = [],
-      row = [];
+    const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+    const csv = [];
+    const row = [];
     for (let r = 0; r < table.rows.length; r++) {
       row.length = 0;
       for (let c = 0; c < table.rows[r].cells.length; c++) {
         const field = table.rows[r].cells[c].innerText
           .trim()
           .replace('シラバスシラバス（ミラー)', '');
-        row.push(escaped.test(field) ? '"' + field.replace(e, '""') + '"' : field);
+        row.push(escaped.test(field) ? `"${field.replace(e, '""')}"` : field);
       }
       csv.push(row.join(',').replace('\n",', '",'));
     }
 
-    var blob = new Blob([bom, csv.join('\n')], { type: 'text/csv' });
+    const blob = new Blob([bom, csv.join('\n')], { type: 'text/csv' });
 
     if ((window.navigator as any).msSaveBlob) {
       // IE
@@ -365,12 +364,12 @@ window.onload = function () {
   const getDateString = () => {
     const date = new Date();
     const Y = date.getFullYear();
-    const M = ('00' + (date.getMonth() + 1)).slice(-2);
-    const D = ('00' + date.getDate()).slice(-2);
-    const h = ('0' + date.getHours()).slice(-2);
-    const m = ('0' + date.getMinutes()).slice(-2);
-    const d = ('0' + date.getSeconds()).slice(-2);
-    return Y + M + D + h + m + d;
+    const M = `00${date.getMonth() + 1}`.slice(-2);
+    const D = `00${date.getDate()}`.slice(-2);
+    const h = `0${date.getHours()}`.slice(-2);
+    const m = `0${date.getMinutes()}`.slice(-2);
+    const d = `0${date.getSeconds()}`.slice(-2);
+    return `${Y}${M}${D}${h}${m}${d}`;
   };
 
   // download CSV file: `kdb_YYYYMMDDhhmmdd.csv`
@@ -401,7 +400,7 @@ window.onload = function () {
     const reqB_value =
       dom.reqB.selectedIndex > -1 ? dom.reqB.options[dom.reqB.selectedIndex].value : 'null';
 
-    if (selectedValue == 'null') {
+    if (selectedValue === 'null') {
       deleteOptions(subSelect);
     } else {
       const types = isA
@@ -429,8 +428,8 @@ window.onload = function () {
     if (!isMobile() && localStorage.getItem('kdb_bookmarks') == null) {
       dom.bookmarkInfo.style.opacity = '1.0';
       const bounding = firstBookmark?.getBoundingClientRect() as DOMRect;
-      dom.bookmarkInfo.style.left = bounding.left + 28 + 'px';
-      dom.bookmarkInfo.style.top = bounding.top + 4 + 'px';
+      dom.bookmarkInfo.style.left = `${bounding.left + 28}px`;
+      dom.bookmarkInfo.style.top = `${bounding.top + 4}px`;
     } else {
       dom.bookmarkInfo.style.display = 'none';
     }
