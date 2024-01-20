@@ -42,7 +42,7 @@ let dom: {
 };
 
 let lineLimit: number;
-let timeout: NodeJS.Timeout;
+let timeout: any;
 
 let bookmarks: string[] = [];
 
